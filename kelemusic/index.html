@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可乐松无损音乐 | 纯净FLAC音质</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 引入音乐数据文件（必须放在主JavaScript之前） -->
+    <script src="music-data.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #10b981;
+            --primary-dark: #0da271;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --light-text: #f1f5f9;
+            --gray-text: #94a3b8;
+            --border-color: #334155;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部 */
+        header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-color), #0da271);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .search-section h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-section p {
+            color: var(--gray-text);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--light-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-text);
+        }
+
+        /* 播放器区域 */
+        .player-section {
+            padding: 2rem 0 3rem;
+        }
+
+        .player-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .player-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .player-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .flac-badge {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .player-main {
+            padding: 2rem;
+        }
+
+        #audio-player {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .album-art {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .track-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .track-info p {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--light-text);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* 频率限制提示 */
+        .rate-limit-info {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--warning-color);
+        }
+
+        .rate-limit-info i {
+            margin-right: 0.5rem;
+        }
+
+        /* 播放列表 */
+        .playlist-section {
+            margin-top: 3rem;
+        }
+
+        .playlist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .playlist-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .playlist {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .playlist-item.playing {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .track-number {
+            width: 30px;
+            color: var(--gray-text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .track-details {
+            flex: 1;
+        }
+
+        .track-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .track-details p {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+        }
+
+        .track-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--light-text);
+        }
+
+        /* 页脚 */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--gray-text);
+            font-size: 0.85rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-section h2 {
+                font-size: 1.75rem;
+            }
+            
+            .now-playing {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .player-actions {
+                flex-direction: column;
+            }
+            
+            .playlist-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h1>可乐松<span>无损音乐</span></h1>
+                </div>
+                <div class="flac-badge">
+                    <i class="fas fa-file-audio"></i> 100% FLAC 无损
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 搜索区域 -->
+        <section class="search-section">
+            <h2>发现纯净的无损音乐</h2>
+            <p>搜索高品质FLAC格式音乐，体验录音室级别的原始音质</p>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="搜索歌曲、艺术家或专辑...">
+            </div>
+        </section>
+
+        <!-- 播放器区域 -->
+        <section class="player-section">
+            <div class="player-card">
+                <div class="player-header">
+                    <h3>正在播放</h3>
+                    <div class="flac-badge">FLAC 24-bit/96kHz</div>
+                </div>
+                
+                <div class="player-main">
+                    <audio id="audio-player" controls crossorigin="anonymous"></audio>
+                    
+                    <div class="now-playing">
+                        <div class="album-art">
+                            <i class="fas fa-compact-disc"></i>
+                        </div>
+                        <div class="track-info">
+                            <h4 id="current-track-title">月光奏鸣曲 - 第一乐章</h4>
+                            <p id="current-track-artist">贝多芬 · 钢琴奏鸣曲集 · 285 MB</p>
+                        </div>
+                    </div>
+                    
+                    <div class="player-actions">
+                        <button id="download-btn" class="btn btn-primary">
+                            <i class="fas fa-download"></i> 下载FLAC文件
+                        </button>
+                        <button id="add-to-playlist" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> 添加到播放列表
+                        </button>
+                    </div>
+                    
+                    <!-- 频率限制提示 -->
+                    <div class="rate-limit-info">
+                        <i class="fas fa-clock"></i>
+                        <span id="rate-limit-message">为保障服务器稳定，1分钟内最多允许2次下载/播放请求</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 播放列表 -->
+        <section class="playlist-section">
+            <div class="playlist-header">
+                <h3>播放列表</h3>
+                <button id="clear-playlist" class="btn btn-secondary">
+                    <i class="fas fa-trash"></i> 清空列表
+                </button>
+            </div>
+            
+            <div class="playlist" id="playlist">
+                <!-- 播放列表将通过JavaScript动态生成 -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 可乐松无损音乐网 · 本网站仅供学习交流使用 · 音乐版权归原作者所有</p>
+            <p style="margin-top: 0.5rem;">
+                <i class="fas fa-exclamation-triangle"></i> 请支持正版音乐 · 托管于 GitHub Pages
+            </p>
+        </div>
+    </footer>
+
+    <!-- 引入播放器库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
+    <script>
+        // 注意：音乐数据现在来自外部的 music-data.js 文件
+        // 如果外部文件加载失败，这里会使用一个空数组作为后备
+        const appMusicList = window.musicList || [];
+
+        // 频率限制管理器
+        class RateLimiter {
+            constructor(limit, period) {
+                this.limit = limit; // 允许的请求次数
+                this.period = period; // 时间周期（毫秒）
+                this.requests = []; // 请求时间记录
+                this.blocked = false; // 是否被暂时封锁
+            }
+
+            // 检查是否允许请求
+            canMakeRequest() {
+                const now = Date.now();
+                
+                // 移除过期的请求记录
+                this.requests = this.requests.filter(time => now - time < this.period);
+                
+                // 检查是否超过限制
+                if (this.requests.length >= this.limit) {
+                    this.blocked = true;
+                    // 计算还需要等待多久
+                    const oldestRequest = this.requests[0];
+                    const waitTime = this.period - (now - oldestRequest);
+                    return {
+                        allowed: false,
+                        waitTime: Math.ceil(waitTime / 1000)
+                    };
+                }
+                
+                this.blocked = false;
+                return { allowed: true, waitTime: 0 };
+            }
+
+            // 记录一次请求
+            recordRequest() {
+                this.requests.push(Date.now());
+            }
+
+            // 获取剩余请求次数
+            getRemainingRequests() {
+                const now = Date.now();
+                this.requests = this.requests.filter(time => now - time < this.period);
+                return Math.max(0, this.limit - this.requests.length);
+            }
+        }
+
+        // 初始化频率限制器（1分钟内最多2次请求）
+        const rateLimiter = new RateLimiter(2, 60 * 1000);
+
+        // 播放器状态
+        let currentTrackIndex = 0;
+        let player = null;
+        let plyr = null;
+        let isPlaying = false;
+
+        // DOM加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查音乐数据是否加载成功
+            if (appMusicList.length === 0) {
+                console.warn('音乐数据未加载，请检查music-data.js文件');
+                updateNowPlaying('音乐库为空', '请编辑music-data.js文件添加音乐');
+            }
+            
+            // 初始化播放器
+            initPlayer();
+            
+            // 渲染播放列表
+            renderPlaylist();
+            
+            // 搜索功能
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', handleSearch);
+            
+            // 下载按钮事件
+            document.getElementById('download-btn').addEventListener('click', handleDownload);
+            
+            // 添加到播放列表按钮
+            document.getElementById('add-to-playlist').addEventListener('click', function() {
+                // 这里可以扩展功能，比如从外部添加歌曲到播放列表
+                alert('此功能待扩展：可从搜索或外部来源添加歌曲到播放列表');
+            });
+            
+            // 清空播放列表按钮
+            document.getElementById('clear-playlist').addEventListener('click', function() {
+                if (confirm('确定要清空播放列表吗？')) {
+                    appMusicList.length = 0;
+                    renderPlaylist();
+                    updateNowPlaying('播放列表为空', '请添加音乐到播放列表');
+                    if (player) {
+                        player.stop();
+                        player.unload();
+                    }
+                }
+            });
+            
+            // 更新频率限制显示
+            updateRateLimitDisplay();
+            setInterval(updateRateLimitDisplay, 1000);
+        });
+
+        // 初始化播放器
+        function initPlayer() {
+            if (appMusicList.length === 0) return;
+            
+            // 初始化Howler播放器
+            player = new Howl({
+                src: [appMusicList[currentTrackIndex].src],
+                html5: true,
+                format: ['flac'],
+                preload: 'metadata',
+                onload: function() {
+                    console.log('FLAC音频加载完成');
+                },
+                onplay: function() {
+                    isPlaying = true;
+                    updateNowPlaying();
+                    highlightCurrentTrack();
+                    // 记录播放请求
+                    const limitCheck = rateLimiter.canMakeRequest();
+                    if (limitCheck.allowed) {
+                        rateLimiter.recordRequest();
+                        updateRateLimitDisplay();
+                    }
+                },
+                onpause: function() {
+                    isPlaying = false;
+                },
+                onend: function() {
+                    playNext();
+                },
+                onloaderror: function(id, error) {
+                    console.error('音频加载错误:', error);
+                    showError('无法加载音频文件，请检查直链地址或网络连接');
+                }
+            });
+
+            // 初始化Plyr播放器UI
+            plyr = new Plyr('#audio-player', {
+                enabled: true,
+                controls: ['play', 'progress', 'current-time', 'duration', 'volume', 'settings'],
+                settings: ['quality', 'speed'],
+                volume: 0.8
+            });
+
+            // 同步Plyr控件与Howler播放功能
+            plyr.on('play', () => {
+                const limitCheck = rateLimiter.canMakeRequest();
+                if (limitCheck.allowed) {
+                    player.play();
+                } else {
+                    plyr.pause();
+                    showError(`请求太频繁，请等待 ${limitCheck.waitTime} 秒后重试`);
+                }
+            });
+            
+            plyr.on('pause', () => player.pause());
+            plyr.on('seek', (event) => {
+                const seekTo = player.duration() * (event.detail / 100);
+                player.seek(seekTo);
+            });
+            plyr.on('volumechange', (event) => {
+                player.volume(event.detail);
+            });
+
+            // 实时更新Plyr进度显示
+            setInterval(() => {
+                if (player && player.playing()) {
+                    const currentTime = player.seek();
+                    const duration = player.duration();
+                    plyr.currentTime = currentTime;
+                    if (duration) {
+                        plyr.elements.progress.value = (currentTime / duration) * 100;
+                    }
+                }
+            }, 200);
+        }
+
+        // 渲染播放列表
+        function renderPlaylist() {
+            const playlistEl = document.getElementById('playlist');
+            playlistEl.innerHTML = '';
+
+            if (appMusicList.length === 0) {
+                playlistEl.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--gray-text);">
+                        <i class="fas fa-music" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>播放列表为空</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">请编辑music-data.js文件添加音乐</p>
+                    </div>
+                `;
+                return;
+            }
+
+            appMusicList.forEach((track, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                if (index === currentTrackIndex) item.classList.add('playing');
+
+                item.innerHTML = `
+                    <div class="track-number">${index + 1}</div>
+                    <div class="track-details">
+                        <h4>${track.title}</h4>
+                        <p>${track.artist} · ${track.album}</p>
+                    </div>
+                    <div class="track-actions">
+                        <button class="action-btn play-btn" data-index="${index}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="action-btn download-btn" data-index="${index}">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                `;
+
+                playlistEl.appendChild(item);
+            });
+
+            // 为播放和下载按钮添加事件监听
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    loadTrack(index);
+                });
+            });
+
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    downloadTrack(index);
+                });
+            });
+
+            // 点击整个项目播放
+            document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    if (!this.classList.contains('playing')) {
+                        loadTrack(index);
+                    }
+                });
+            });
+        }
+
+        // 加载并播放指定曲目
+        function loadTrack(index) {
+            if (index < 0 || index >= appMusicList.length) return;
+            
+            // 检查频率限制
+            const limitCheck = rateLimiter.canMakeRequest();
+            if (!limitCheck.allowed) {
+                showError(`请求太频繁，请等待 ${limitCheck.waitTime} 秒后重试`);
+                return;
+            }
+            
+            // 记录请求
+            rateLimiter.recordRequest();
+            updateRateLimitDisplay();
+            
+            // 移除当前播放状态
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('playing');
+            });
+            
+            // 停止当前播放
+            if (player) {
+                player.stop();
+                player.unload();
+            }
+            
+            // 更新当前曲目索引
+            currentTrackIndex = index;
+            
+            // 创建新的Howler实例
+            player = new Howl({
+                src: [appMusicList[currentTrackIndex].src],
+                html5: true,
+                format: ['flac'],
+                preload: 'metadata',
+                onplay: function() {
+                    isPlaying = true;
+                    highlightCurrentTrack();
+                    updateNowPlaying();
+                    plyr.play();
+                },
+                onloaderror: function(id, error) {
+                    console.error('音频加载错误:', error);
+                    showError(`无法加载 "${appMusicList[currentTrackIndex].title}"，请检查直链地址`);
+                }
+            });
+            
+            // 播放
+            player.play();
+        }
+
+        // 播放下一首
+        function playNext() {
+            if (appMusicList.length === 0) return;
+            const nextIndex = (currentTrackIndex + 1) % appMusicList.length;
+            loadTrack(nextIndex);
+        }
+
+        // 高亮当前播放曲目
+        function highlightCurrentTrack() {
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('playing');
+            });
+            
+            if (appMusicList.length > 0) {
+                document.querySelectorAll('.playlist-item')[currentTrackIndex].classList.add('playing');
+            }
+        }
+
+        // 更新当前播放信息
+        function updateNowPlaying(title, artist) {
+            if (appMusicList.length === 0) {
+                document.getElementById('current-track-title').textContent = title || '音乐库为空';
+                document.getElementById('current-track-artist').textContent = artist || '请编辑music-data.js文件添加音乐';
+                return;
+            }
+            
+            const track = appMusicList[currentTrackIndex];
+            document.getElementById('current-track-title').textContent = track.title;
+            document.getElementById('current-track-artist').textContent = 
+                `${track.artist} · ${track.album} · ${track.size}`;
+        }
+
+        // 处理下载
+        function handleDownload() {
+            if (appMusicList.length === 0) {
+                showError('没有可下载的音乐');
+                return;
+            }
+            
+            downloadTrack(currentTrackIndex);
+        }
+
+        // 下载指定曲目
+        function downloadTrack(index) {
+            if (index < 0 || index >= appMusicList.length) return;
+            
+            // 检查频率限制
+            const limitCheck = rateLimiter.canMakeRequest();
+            if (!limitCheck.allowed) {
+                showError(`下载请求太频繁，请等待 ${limitCheck.waitTime} 秒后重试`);
+                return;
+            }
+            
+            const track = appMusicList[index];
+            
+            // 记录请求
+            rateLimiter.recordRequest();
+            updateRateLimitDisplay();
+            
+            // 创建下载链接
+            const a = document.createElement('a');
+            a.href = track.src;
+            a.download = `${track.artist} - ${track.title}.flac`;
+            a.target = '_blank';
+            
+            // 模拟点击下载
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // 显示下载成功消息
+            showSuccess(`开始下载: ${track.title}`);
+        }
+
+        // 搜索处理
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                renderPlaylist();
+                return;
+            }
+            
+            const filteredList = appMusicList.filter(track => 
+                track.title.toLowerCase().includes(searchTerm) ||
+                track.artist.toLowerCase().includes(searchTerm) ||
+                track.album.toLowerCase().includes(searchTerm) ||
+                (track.genre && track.genre.toLowerCase().includes(searchTerm))
+            );
+            
+            // 临时显示搜索结果
+            const playlistEl = document.getElementById('playlist');
+            
+            if (filteredList.length === 0) {
+                playlistEl.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--gray-text);">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>未找到匹配的歌曲</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示搜索结果
+            let html = '';
+            filteredList.forEach((track, index) => {
+                const originalIndex = appMusicList.indexOf(track);
+                html += `
+                    <div class="playlist-item" style="cursor: pointer;" onclick="loadTrackFromSearch(${originalIndex})">
+                        <div class="track-number">${index + 1}</div>
+                        <div class="track-details">
+                            <h4>${track.title}</h4>
+                            <p>${track.artist} · ${track.album}</p>
+                        </div>
+                        <div class="track-actions">
+                            <button class="action-btn" onclick="event.stopPropagation(); loadTrackFromSearch(${originalIndex})">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="action-btn" onclick="event.stopPropagation(); downloadTrack(${originalIndex})">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            playlistEl.innerHTML = html;
+        }
+
+        // 从搜索结果加载曲目（全局函数）
+        window.loadTrackFromSearch = function(index) {
+            loadTrack(index);
+            // 清空搜索框
+            document.getElementById('search-input').value = '';
+            // 恢复完整播放列表
+            renderPlaylist();
+        };
+
+        // 更新频率限制显示
+        function updateRateLimitDisplay() {
+            const remaining = rateLimiter.getRemainingRequests();
+            const message = `为保障服务器稳定，1分钟内最多允许2次下载/播放请求 (剩余: ${remaining}次)`;
+            document.getElementById('rate-limit-message').textContent = message;
+            
+            // 更新下载按钮状态
+            const downloadBtn = document.getElementById('download-btn');
+            if (remaining === 0) {
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = '<i class="fas fa-clock"></i> 请求受限';
+            } else {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> 下载FLAC文件';
+            }
+        }
+
+        // 显示错误消息
+        function showError(message) {
+            const oldAlert = document.querySelector('.alert-message');
+            if (oldAlert) oldAlert.remove();
+            
+            const alert = document.createElement('div');
+            alert.className = 'alert-message';
+            alert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: var(--danger-color);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            alert.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // 显示成功消息
+        function showSuccess(message) {
+            const oldAlert = document.querySelector('.alert-message');
+            if (oldAlert) oldAlert.remove();
+            
+            const alert = document.createElement('div');
+            alert.className = 'alert-message';
+            alert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: var(--primary-color);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            alert.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
