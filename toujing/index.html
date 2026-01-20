@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凸透镜成像规律探究实验</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-microscope"></i> 凸透镜成像规律探究实验</h1>
+            <p class="subtitle">交互式物理模拟器 - 探索凸透镜成像的奥秘</p>
+        </header>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h2><i class="fas fa-sliders-h"></i> 参数控制</h2>
+                
+                <div class="parameter-control">
+                    <div class="parameter">
+                        <label for="focal-length">
+                            <i class="fas fa-ruler-combined"></i> 焦距 (f)
+                            <span class="value-display" id="f-value">20</span> cm
+                        </label>
+                        <input type="range" id="focal-length" min="5" max="40" value="20" step="1">
+                        <div class="range-labels">
+                            <span>5cm (短焦)</span>
+                            <span>40cm (长焦)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="parameter">
+                        <label for="object-distance">
+                            <i class="fas fa-arrows-alt-h"></i> 物距 (u)
+                            <span class="value-display" id="u-value">60</span> cm
+                        </label>
+                        <input type="range" id="object-distance" min="10" max="100" value="60" step="1">
+                        <div class="range-labels">
+                            <span>10cm</span>
+                            <span>100cm</span>
+                        </div>
+                    </div>
+                    
+                    <div class="parameter">
+                        <label for="object-height">
+                            <i class="fas fa-arrows-alt-v"></i> 物体高度
+                            <span class="value-display" id="h-value">10</span> cm
+                        </label>
+                        <input type="range" id="object-height" min="5" max="20" value="10" step="1">
+                        <div class="range-labels">
+                            <span>5cm</span>
+                            <span>20cm</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preset-buttons">
+                    <h3><i class="fas fa-vial"></i> 实验预设场景</h3>
+                    <div class="button-group">
+                        <button class="preset-btn" data-f="20" data-u="15">u < f (虚像)</button>
+                        <button class="preset-btn" data-f="20" data-u="20">u = f (不成像)</button>
+                        <button class="preset-btn" data-f="20" data-u="30">f < u < 2f (放大实像)</button>
+                        <button class="preset-btn" data-f="20" data-u="40">u = 2f (等大实像)</button>
+                        <button class="preset-btn" data-f="20" data-u="60">u > 2f (缩小实像)</button>
+                    </div>
+                </div>
+                
+                <div class="manual-input">
+                    <h3><i class="fas fa-keyboard"></i> 手动输入精确值</h3>
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="f-input">焦距 f (cm):</label>
+                            <input type="number" id="f-input" min="5" max="40" value="20">
+                        </div>
+                        <div class="input-field">
+                            <label for="u-input">物距 u (cm):</label>
+                            <input type="number" id="u-input" min="10" max="100" value="60">
+                        </div>
+                        <div class="input-field">
+                            <label for="h-input">物体高度 (cm):</label>
+                            <input type="number" id="h-input" min="5" max="20" value="10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="simulation-area">
+                <div class="simulation-header">
+                    <h2><i class="fas fa-project-diagram"></i> 凸透镜成像光路图</h2>
+                    <div class="legend">
+                        <div class="legend-item"><span class="legend-color object"></span> 物体</div>
+                        <div class="legend-item"><span class="legend-color image"></span> 像</div>
+                        <div class="legend-item"><span class="legend-color ray1"></span> 平行光线</div>
+                        <div class="legend-item"><span class="legend-color ray2"></span> 过光心光线</div>
+                        <div class="legend-item"><span class="legend-color ray3"></span> 过焦点光线</div>
+                    </div>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="lens-canvas" width="800" height="400"></canvas>
+                    <div class="canvas-labels">
+                        <div class="label-left">物体侧</div>
+                        <div class="label-right">像侧</div>
+                    </div>
+                </div>
+                
+                <div class="image-properties">
+                    <h2><i class="fas fa-image"></i> 成像特性分析</h2>
+                    <div class="properties-grid">
+                        <div class="property-card">
+                            <div class="property-title">像的性质</div>
+                            <div class="property-value" id="image-type">倒立缩小的实像</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-title">像距 (v)</div>
+                            <div class="property-value" id="v-value">30.00 cm</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-title">像高</div>
+                            <div class="property-value" id="image-height">5.00 cm</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-title">放大率</div>
+                            <div class="property-value" id="magnification">0.50</div>
+                        </div>
+                    </div>
+                    
+                    <div class="lens-formula">
+                        <h3><i class="fas fa-square-root-alt"></i> 透镜成像公式</h3>
+                        <div class="formula-display">
+                            <div class="formula">1/f = 1/u + 1/v</div>
+                            <div class="current-calculation" id="formula-calculation">1/20 = 1/60 + 1/30</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="experiment-guide">
+                <h2><i class="fas fa-clipboard-list"></i> 凸透镜成像规律探究实验</h2>
+                <div class="experiment-content">
+                    <div class="experiment-step">
+                        <h3><i class="fas fa-play"></i> 实验目的</h3>
+                        <p>通过改变物体到凸透镜的距离（物距u），观察并记录像的大小、正倒、虚实，以及像到凸透镜的距离（像距v），从而总结凸透镜成像规律。</p>
+                    </div>
+                    
+                    <div class="experiment-step">
+                        <h3><i class="fas fa-list-ol"></i> 实验步骤</h3>
+                        <ol>
+                            <li>使用上方滑块或预设场景按钮设置焦距(f)和物距(u)</li>
+                            <li>观察光路图中三条特殊光线的传播路径：<br>
+                                - 平行于主光轴的光线，经凸透镜后过焦点<br>
+                                - 过光心的光线，传播方向不变<br>
+                                - 过焦点的光线，经凸透镜后平行于主光轴</li>
+                            <li>观察成像特性区域，记录像的性质、像距和像高</li>
+                            <li>改变物距，重复实验，总结成像规律</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="experiment-step">
+                        <h3><i class="fas fa-chart-line"></i> 成像规律总结</h3>
+                        <div class="law-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>物距 (u)</th>
+                                        <th>像的性质</th>
+                                        <th>像距 (v)</th>
+                                        <th>应用</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>u > 2f</td>
+                                        <td>倒立、缩小的实像</td>
+                                        <td>f < v < 2f</td>
+                                        <td>照相机</td>
+                                    </tr>
+                                    <tr>
+                                        <td>u = 2f</td>
+                                        <td>倒立、等大的实像</td>
+                                        <td>v = 2f</td>
+                                        <td>测焦距</td>
+                                    </tr>
+                                    <tr>
+                                        <td>f < u < 2f</td>
+                                        <td>倒立、放大的实像</td>
+                                        <td>v > 2f</td>
+                                        <td>投影仪</td>
+                                    </tr>
+                                    <tr>
+                                        <td>u = f</td>
+                                        <td>不成像 (出射光平行)</td>
+                                        <td>v → ∞</td>
+                                        <td>探照灯</td>
+                                    </tr>
+                                    <tr>
+                                        <td>u < f</td>
+                                        <td>正立、放大的虚像</td>
+                                        <td>|v| > u (同侧)</td>
+                                        <td>放大镜</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>凸透镜成像模拟器 | 用于物理教学与研究 | 按透镜公式 1/f = 1/u + 1/v 计算</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
