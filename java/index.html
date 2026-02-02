@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java发行版大全 | 开发 & Minecraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #007396;
+            --secondary: #f89820;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --border: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #005073);
+            color: white;
+            padding: 2.5rem 0;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 10px 10px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            color: var(--secondary);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .highlight {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 115, 150, 0.2);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .stats {
+            font-size: 0.95rem;
+            color: #6c757d;
+            padding: 0 10px;
+        }
+        
+        .jdks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 2.5rem;
+        }
+        
+        .jdk-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .jdk-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .jdk-header {
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .jdk-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .jdk-type {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .jdk-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .jdk-description {
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .jdk-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-tag {
+            padding: 5px 12px;
+            background-color: #e9ecef;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        
+        .feature-tag.highlight {
+            background-color: rgba(248, 152, 32, 0.15);
+            color: #d17a08;
+        }
+        
+        .jdk-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .jdk-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .jdk-link:hover {
+            background-color: #005073;
+            transform: scale(1.05);
+        }
+        
+        .license {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #adb5bd;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        
+        .mc-notice {
+            background: linear-gradient(135deg, #fff9e6, #ffefbf);
+            border-left: 5px solid var(--secondary);
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .mc-notice i {
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+        
+        .mc-notice p {
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .jdks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fab fa-java"></i> Java发行版大全</h1>
+            <p class="subtitle">收录所有主要Java发行版 - 适用于<span class="highlight">开发</span>、<span class="highlight">生产</span>与<span class="highlight">Minecraft</span>游戏</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="mc-notice">
+            <i class="fas fa-gamepad"></i>
+            <p><strong>Minecraft玩家注意：</strong> 对于玩Minecraft，建议优先选择性能优化良好的发行版，如Eclipse Temurin、Microsoft JDK或Zulu，它们通常与游戏有更好的兼容性。</p>
+        </div>
+        
+        <div class="controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="搜索Java发行版 (名称、描述或特性)">
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-layer-group"></i> 全部展示
+                </button>
+                <button class="filter-btn" data-filter="free">
+                    <i class="fas fa-unlock-alt"></i> 免费商用
+                </button>
+                <button class="filter-btn" data-filter="mc">
+                    <i class="fas fa-gamepad"></i> 适合MC
+                </button>
+            </div>
+            
+            <div class="stats">
+                共 <span id="totalCount">0</span> 个发行版
+            </div>
+        </div>
+        
+        <div class="jdks-grid" id="jdksContainer">
+            <!-- JDK卡片将通过JavaScript动态生成 -->
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>本页面仅用于Java发行版信息展示与参考 | 数据来源于各发行版官方文档 | 最后更新：2026年2月</p>
+            <p>使用提示：点击发行版卡片上的按钮可直接访问其官方网站</p>
+        </div>
+    </footer>
+
+    <script>
+        // Java发行版数据
+        const javaDistributions = [
+            {
+                id: 1,
+                name: "Eclipse Temurin",
+                type: "开源免费",
+                description: "Eclipse基金会提供的OpenJDK发行版，由Adoptium项目维护。提供高质量的二进制文件，适用于所有主流平台。",
+                features: ["免费商用", "长期支持(LTS)", "性能优秀", "适合MC"],
+                url: "https://adoptium.net/",
+                license: "GPLv2+CE",
+                mcRecommended: true
+            },
+            {
+                id: 2,
+                name: "Oracle JDK",
+                type: "商业/免费",
+                description: "Oracle官方的JDK发行版。从JDK 17开始，生产环境使用需要商业许可，但开发与测试仍免费。",
+                features: ["官方标准", "功能完整", "商业支持"],
+                url: "https://www.oracle.com/java/technologies/downloads/",
+                license: "OTN协议",
+                mcRecommended: false
+            },
+            {
+                id: 3,
+                name: "Amazon Corretto",
+                type: "开源免费",
+                description: "亚马逊提供的免费、多平台的OpenJDK发行版，提供长期支持，针对AWS环境优化。",
+                features: ["免费商用", "长期支持", "AWS优化"],
+                url: "https://aws.amazon.com/corretto/",
+                license: "GPLv2+CE",
+                mcRecommended: true
+            },
+            {
+                id: 4,
+                name: "Microsoft Build of OpenJDK",
+                type: "开源免费",
+                description: "微软维护的OpenJDK发行版，针对Azure和Windows环境进行了优化。",
+                features: ["免费商用", "Windows优化", "Azure集成"],
+                url: "https://www.microsoft.com/openjdk",
+                license: "GPLv2+CE",
+                mcRecommended: true
+            },
+            {
+                id: 5,
+                name: "Azul Zulu",
+                type: "开源免费/商业",
+                description: "Azul Systems提供的OpenJDK发行版，免费版功能完整，商业版提供额外支持与服务。",
+                features: ["免费商用", "多平台支持", "性能监控"],
+                url: "https://www.azul.com/downloads/?package=jdk",
+                license: "GPLv2+CE",
+                mcRecommended: true
+            },
+            {
+                id: 6,
+                name: "Liberica JDK",
+                type: "开源免费",
+                description: "BellSoft提供的OpenJDK发行版，针对所有主流平台，包括标准版和精简版。",
+                features: ["免费商用", "全面平台支持", "Alpine Linux优化"],
+                url: "https://bell-sw.com/pages/downloads/",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 7,
+                name: "SapMachine",
+                type: "开源免费",
+                description: "SAP维护的OpenJDK发行版，针对SAP应用优化，但也适合一般用途。",
+                features: ["免费商用", "SAP环境优化", "长期支持"],
+                url: "https://sap.github.io/SapMachine/",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 8,
+                name: "Red Hat OpenJDK",
+                type: "开源免费",
+                description: "红帽提供的OpenJDK发行版，针对RHEL和OpenShift环境优化，需要订阅获取支持。",
+                features: ["企业级支持", "RHEL优化", "容器友好"],
+                url: "https://developers.redhat.com/products/openjdk/download",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 9,
+                name: "IBM Semeru Runtimes",
+                type: "开源免费",
+                description: "IBM基于OpenJDK提供的免费运行时，包含OpenJ9虚拟机，针对云和容器环境优化。",
+                features: ["免费商用", "低内存占用", "快速启动"],
+                url: "https://www.ibm.com/semeru-runtimes",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 10,
+                name: "阿里巴巴 Dragonwell",
+                type: "开源免费",
+                description: "阿里巴巴开源的OpenJDK发行版，针对在线电商、金融和云计算场景深度优化。",
+                features: ["免费商用", "阿里云优化", "中国特色功能"],
+                url: "https://dragonwell-jdk.io/",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 11,
+                name: "腾讯 Kona JDK",
+                type: "开源免费",
+                description: "腾讯基于OpenJDK开发的发行版，针对大数据、机器学习等场景优化。",
+                features: ["免费商用", "大数据优化", "云原生"],
+                url: "https://github.com/Tencent/TencentKona-8",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 12,
+                name: "华为毕昇JDK",
+                type: "开源免费",
+                description: "华为基于OpenJDK定制的发行版，针对ARM架构和华为云环境深度优化。",
+                features: ["免费商用", "ARM架构优化", "华为云集成"],
+                url: "https://www.hikunpeng.com/developer/devkit/compiler/jdk",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 13,
+                name: "GraalVM Community",
+                type: "开源免费",
+                description: "Oracle开发的高性能运行时，支持多语言执行和原生镜像编译。",
+                features: ["多语言", "原生编译", "高性能"],
+                url: "https://www.graalvm.org/",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            },
+            {
+                id: 14,
+                name: "OpenJDK (官方)",
+                type: "开源免费",
+                description: "OpenJDK官方源代码，需要自行编译。是所有发行版的基础。",
+                features: ["源码形式", "可定制性高", "上游项目"],
+                url: "https://openjdk.java.net/",
+                license: "GPLv2",
+                mcRecommended: true
+            },
+            {
+                id: 15,
+                name: "ojdkbuild",
+                type: "开源免费",
+                description: "社区维护的OpenJDK Windows构建版本，提供Windows环境的替代选择。",
+                features: ["Windows优化", "社区维护", "免费商用"],
+                url: "https://github.com/ojdkbuild/ojdkbuild",
+                license: "GPLv2+CE",
+                mcRecommended: false
+            }
+        ];
+
+        // DOM元素
+        const jdksContainer = document.getElementById('jdksContainer');
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const totalCountElement = document.getElementById('totalCount');
+        
+        // 当前过滤状态
+        let currentFilter = 'all';
+        let currentSearch = '';
+        
+        // 初始化显示所有发行版
+        function initPage() {
+            renderJDKs(javaDistributions);
+            totalCountElement.textContent = javaDistributions.length;
+            
+            // 设置筛选按钮事件
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // 更新按钮状态
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // 更新过滤器
+                    currentFilter = button.getAttribute('data-filter');
+                    filterAndRender();
+                });
+            });
+            
+            // 设置搜索事件
+            searchInput.addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase();
+                filterAndRender();
+            });
+        }
+        
+        // 过滤和渲染JDK卡片
+        function filterAndRender() {
+            let filtered = javaDistributions;
+            
+            // 应用搜索过滤
+            if (currentSearch) {
+                filtered = filtered.filter(jdk => 
+                    jdk.name.toLowerCase().includes(currentSearch) ||
+                    jdk.description.toLowerCase().includes(currentSearch) ||
+                    jdk.features.some(feature => feature.toLowerCase().includes(currentSearch))
+                );
+            }
+            
+            // 应用分类过滤
+            if (currentFilter === 'free') {
+                filtered = filtered.filter(jdk => 
+                    jdk.features.includes("免费商用")
+                );
+            } else if (currentFilter === 'mc') {
+                filtered = filtered.filter(jdk => 
+                    jdk.mcRecommended === true
+                );
+            }
+            
+            // 渲染结果
+            renderJDKs(filtered);
+            totalCountElement.textContent = filtered.length;
+        }
+        
+        // 渲染JDK卡片
+        function renderJDKs(jdks) {
+            if (jdks.length === 0) {
+                jdksContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>未找到匹配的Java发行版</h3>
+                        <p>尝试使用不同的搜索词或筛选条件</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            jdksContainer.innerHTML = jdks.map(jdk => `
+                <div class="jdk-card" data-id="${jdk.id}">
+                    <div class="jdk-header">
+                        <h3 class="jdk-title">${jdk.name}</h3>
+                        <span class="jdk-type">${jdk.type}</span>
+                    </div>
+                    <div class="jdk-body">
+                        <p class="jdk-description">${jdk.description}</p>
+                        <div class="jdk-features">
+                            ${jdk.features.map(feature => `
+                                <span class="feature-tag ${feature.includes('MC') || feature.includes('免费') ? 'highlight' : ''}">${feature}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="jdk-footer">
+                        <a href="${jdk.url}" target="_blank" class="jdk-link">
+                            <i class="fas fa-external-link-alt"></i> 访问官网
+                        </a>
+                        <span class="license">${jdk.license}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
