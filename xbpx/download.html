@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载 - 小白专用批量后缀修改工具</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --accent-green: #00ff41;
+            --accent-hover: #00cc33;
+            --border-color: #30363d;
+            --code-bg: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: var(--accent-green); transition: 0.3s; }
+        a:hover { color: #fff; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        .back-link:hover { color: var(--accent-green); }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 40px;
+            background: linear-gradient(180deg, rgba(22,27,34,0) 0%, rgba(13,17,23,1) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .hero p {
+            color: #8b949e;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 下载区域核心样式 */
+        .download-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .main-download-container {
+            margin-bottom: 40px;
+        }
+
+        .main-download-btn {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1) 0%, rgba(0, 255, 65, 0.05) 100%);
+            border: 2px solid var(--accent-green);
+            border-radius: 15px;
+            color: var(--accent-green);
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .main-download-btn:hover {
+            background: var(--accent-green);
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px var(--accent-green);
+        }
+
+        .main-download-icon {
+            display: block;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        /* 备用链接样式 */
+        .sub-links-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .sub-link {
+            display: inline-block;
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: #8b949e;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .sub-link:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .info-title {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-content {
+            color: #8b949e;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-download-btn { font-size: 1.5rem; padding: 30px 10px; }
+            .main-download-icon { font-size: 2.5rem; }
+            .sub-links-container { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" class="back-link">&lt; 返回主页</a>
+        <div style="color: var(--accent-green); font-weight: bold;">xBPX</div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>下载</h1>
+            <p>最新版本:v1.0</p>
+        </section>
+
+        <!-- Download Section (Modified) -->
+        <section class="download-section">
+            <div class="main-download-container">
+                <!-- 巨大的主下载按钮 -->
+                <!-- 请将 href 替换为您的 Gitee Release 链接 -->
+                <a href="https://gitee.com/mckekelekuangtiesong_0/xbpx/releases/download/1.0/XBPX%E5%B0%8F%E7%99%BD%E4%B8%93%E7%94%A8%E6%89%B9%E9%87%8F%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7v1.0.bat" target="_blank" class="main-download-btn">
+                    <span class="main-download-icon">⬇</span>
+                    点我下载
+                </a>
+            </div>
+
+            <!-- 三个小的备用链接 -->
+            <div class="sub-links-container">
+                <!-- 按钮 2: GitHub -->
+                <!-- 如果还没有 GitHub 仓库，可以暂时留 # -->
+                <a href="https://github.com/zhanghaoxuan02/xbpx/releases/download/1.0/XBPX.v1.0.bat" target="_blank" class="sub-link">备用下载1（推荐国外使用）</a>
+
+                <!-- 按钮 3: GitCode -->
+                <a href="https://pan.mcbebbs.cn/f/4nWHq/XBPX%E5%B0%8F%E7%99%BD%E4%B8%93%E7%94%A8%E6%89%B9%E9%87%8F%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7v1.0.bat" target="_blank" class="sub-link">备用下载2</a>
+
+                <!-- 备用链接：自定义 -->
+                <!-- 请在这里自定义您的备用链接 -->
+                <!-- 例如：百度网盘、蓝奏云等 -->
+                <a href="https://zhangxuan.lanzouq.com/iXNIW3hymqha" class="sub-link">从网盘下载（密码：xbpx）</a>
+            </div>
+        </section>
+
+        <!-- Info Section -->
+        <section>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-title">✨ 特性说明</div>
+                    <div class="info-content">
+                        极简、稳定、无广告的文件后缀批量修改工具。专为小白用户设计，一键重命名，自动记忆路径，完美解决空格路径与编码问题。
+                        <br><br>
+                        ✅ 自动记忆路径<br>
+                        ✅ 支持 IoT 环境测试<br>
+                        ✅ 驱动修复机制
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🛠️ 技术栈</div>
+                    <div class="info-content">
+                        语言：Windows Shell (Batch)<br>
+                        内核支持：Windows CMD<br>
+                        兼容性：Windows 11 / 10 / 8 / 7
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">📜 开源协议</div>
+                    <div class="info-content">
+                        协议类型：MIT License<br>
+                        权限：允许商用、修改、闭源<br>
+                        限制：必须保留原作者署名
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">👨‍💻 开发者</div>
+                    <div class="info-content">
+                        Powered by zhanghaoxuan<br>
+                        内部代号：v2.3<br>
+                        发布版本：v1.0
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 xBPX. All rights reserved.</p>
+        <p style="margin-top: 10px; opacity: 0.6;">Powered by zhanghaoxuan</p>
+    </footer>
+</div>
+
+</body>
+</html>

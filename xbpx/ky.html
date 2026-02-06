@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开源 - 小白专用批量后缀修改工具</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --accent-green: #00ff41;
+            --accent-hover: #00cc33;
+            --border-color: #30363d;
+            --code-bg: #000000;
+            --gitee-red: #C71D23;
+            --github-black: #24292F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: var(--accent-green); transition: 0.3s; }
+        a:hover { color: #fff; }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部导航 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        .back-link:hover { color: var(--accent-green); }
+
+        /* Hero 区域 */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 50px;
+            background: linear-gradient(180deg, rgba(22,27,34,0) 0%, rgba(13,17,23,1) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .hero p {
+            color: #8b949e;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 平台卡片区域 (左右布局) */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .platform-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-green);
+        }
+
+        .platform-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .gitee-color { color: var(--gitee-red); }
+        .github-color { color: #fff; }
+
+        .platform-name {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-gitee {
+            background-color: rgba(199, 29, 35, 0.1);
+            color: var(--gitee-red);
+            border: 1px solid var(--gitee-red);
+        }
+        .btn-gitee:hover {
+            background-color: var(--gitee-red);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(199, 29, 35, 0.4);
+        }
+
+        .btn-github {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid #fff;
+        }
+        .btn-github:hover {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        /* 克隆命令区域 */
+        .code-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .terminal-box {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-family: 'Consolas', 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .terminal-text {
+            color: #8b949e;
+            font-size: 1.1rem;
+        }
+
+        .highlight-text { color: var(--accent-green); }
+
+        .copy-btn {
+            position: absolute;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
+            color: #8b949e;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        /* 贡献指南 */
+        .contribute-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .contribute-icon {
+            font-size: 2.5rem;
+        }
+
+        .contribute-content h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .contribute-content p {
+            color: #8b949e;
+            font-size: 0.95rem;
+        }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .platform-grid { grid-template-columns: 1fr; }
+            .terminal-box { flex-direction: column; gap: 10px; }
+            .copy-btn { position: static; margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" class="back-link">&lt; 返回主页</a>
+        <div style="color: var(--accent-green); font-weight: bold;">Open Source</div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>开源协作 & 源码托管</h1>
+            <p>xbpx 项目完全开源，代码托管在 Gitee 和 Github 双平台。欢迎 Fork、Star 以及提交 Pull Request，让这个工具变得更强！</p>
+        </section>
+
+        <!-- 平台卡片区域 -->
+        <section>
+            <h2 class="section-title">📍 代码仓库</h2>
+            <div class="platform-grid">
+                <!-- Gitee Card -->
+                <div class="platform-card">
+                    <div class="platform-icon gitee-color">G</div>
+                    <div class="platform-name">Gitee</div>
+                    <div style="color: #8b949e; margin-bottom: 20px;">国内推荐，访问速度快</div>
+                    <a href="https://gitee.com/mckekelekuangtiesong_0/xbpx" target="_blank" class="btn btn-gitee">访问仓库</a>
+                    <div style="font-size: 0.8rem; color: #555;">mckekekuangtiesong_0 / xBPX</div>
+                </div>
+
+                <!-- Github Card -->
+                <div class="platform-card">
+                    <div class="platform-icon github-color"><span style="background:#fff; color:#000; border-radius:50%; padding:5px; font-size:2rem;">G</span></div>
+                    <div class="platform-name">Github</div>
+                    <div style="color: #8b949e; margin-bottom: 20px;">国际化协作</div>
+                    <a href="https://github.com/zhanghaoxuan02/xbpx" target="_blank" class="btn btn-github">访问仓库</a>
+                    <div style="font-size: 0.8rem; color: #555;">zhanghaoxuan02 / xBPX</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clone 区域 -->
+        <section class="code-section">
+            <h2 class="section-title">⌨️ 克隆源码 (Git Clone)</h2>
+            <div class="terminal-box">
+                <div class="terminal-text">
+                    $ git clone <span class="highlight-text">https://gitee.com/mckekelekuangtiesong_0/xbpx.git</span>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard()">复制命令</button>
+            </div>
+        </section>
+
+        <!-- 贡献区域 -->
+        <section class="contribute-box">
+            <div class="contribute-icon">🛠️</div>
+            <div class="contribute-content">
+                <h3>欢迎贡献</h3>
+                <p>我们非常欢迎任何形式的贡献！</p>
+                <ul style="margin-top: 10px; margin-left: 20px; color: #8b949e;">
+                    <li>修复 Bug 或优化代码</li>
+                    <li>增加新特性 (如：递归重命名)</li>
+                    <li>优化文档或翻译</li>
+                    <li>报告漏洞或提出建议</li>
+                </ul>
+                <p style="margin-top: 10px; color: var(--accent-green);">协议：MIT License (允许商用)</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 xBPX. All rights reserved.</p>
+        <p style="margin-top: 10px; opacity: 0.6;">Powered by zhanghaoxuan</p>
+    </footer>
+</div>
+
+<script>
+    // 复制命令功能
+    function copyToClipboard() {
+        const text = "git clone https://gitee.com/mckekekuangtiesong_0/xbpx.git";
+        navigator.clipboard.writeText(text).then(function() {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "已复制！";
+            btn.style.background = "var(--accent-green)";
+            btn.style.color = "#000";
+            setTimeout(function() {
+                btn.innerText = originalText;
+                btn.style.background = "rgba(255,255,255,0.1)";
+                btn.style.color = "#8b949e";
+            }, 2000);
+        }, function(err) {
+            alert('复制失败，请手动复制');
+        });
+    }
+</script>
+
+</body>
+</html>
